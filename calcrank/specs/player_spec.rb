@@ -3,7 +3,7 @@ require_relative "test_helper"
 
 describe Player do
   
-  describe ".getpoints" do
+  describe "#initialize" do
 
     it "When create a player instance the attributes must be accessible" do
       

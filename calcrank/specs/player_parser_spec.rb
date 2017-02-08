@@ -1,7 +1,7 @@
 require "minitest/autorun"
 require_relative "test_helper"
 
-describe Player do
+describe PlayerParser do
   
   describe ".execute" do
 

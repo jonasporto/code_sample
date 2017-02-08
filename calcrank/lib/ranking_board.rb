@@ -1,43 +1,41 @@
 class RankingBoard
   
   def initialize
-    @players = {}
+    @players = Hash.new(0)
   end
 
   def <<(players)
     players.each do |player|
-      @players[player.name] = @players[player.name].to_i + player.points
+      @players[player.name] += player.points
     end
   end
 
   def to_s
-    sort_rank.join("\n")
+    rank_results.join("\n")
+  end
+
+  def rank_results
+    counter = OpenStruct.new(rank: 0, points: 0, results: [])
+    
+    ranked_players.inject(counter) do |ctr, (name, points)|
+      
+      ctr.rank += 1 unless ctr.points == points
+      ctr.results << formatted_result(ctr.rank, name, points)
+      
+      ctr.points = points
+      ctr
+    end.results
   end
 
   private
 
-  def sorted_players
-    Array(@players.sort_by(&:last).reverse)
+  def ranked_players
+    @players.sort_by(&:last).reverse
   end
 
-  def sort_rank
-    rank, last_points = 0, []        
-    sorted_players.each do |name, points|
-      rank += 1 unless last_points == points
-      last_points = points
-      results << result_to_s(rank, name, points)
-    end
-
-    results
-  end
-
-  def result_to_s(rank, name, points)
+  def formatted_result(rank, name, points)
     result = "#{rank}. #{name}, #{points}"
-    result << (points == 1 ? " pt " : " pts ")
+    result << (points == 1 ? " pt" : " pts")
     result
-  end
-
-  def results
-    @_results ||= []
   end
 end

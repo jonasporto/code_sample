@@ -1,25 +1,22 @@
 #!/usr/bin/env ruby
 
+require_relative "parser_helper"
 require_relative "player_parser"
 require_relative "player"
 require_relative "rules"
 require_relative "ranking_board"
 
 def calcrank(matches)
-
-  ranking = RankingBoard.new
+  matches.inject(RankingBoard.new) do |ranking, match|
   
-  matches.each do |match|
-  
-    players = match.split(',')
+    player_1, player_2 = match.split(',')
     
-    player_1 = Player.new(PlayerParser.execute(players[0]))
-    player_2 = Player.new(PlayerParser.execute(players[1])) 
+    player_1 = ParserHelper::Player(player_1)
+    player_2 = ParserHelper::Player(player_2) 
     
     ranking << Rules.get_points(player_1, player_2)
+    ranking
   end
-
-  ranking
 end
 
 # Only run when this file is the main file
